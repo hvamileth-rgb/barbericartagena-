@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbería Cartagena - Reservas</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #111; color: white; margin: 0; padding: 20px; }
+  .caja { max-width: 420px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 15px; }
+  h1 { text-align: center; color: #f5c518; margin: 0; }
+  p { text-align: center; color: #bbb; font-size: 14px; }
+  label { display: block; margin-top: 15px; font-weight: bold; font-size: 14px; }
+  input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: none; box-sizing: border-box; font-size: 15px; }
+  button { width: 100%; padding: 14px; margin-top: 20px; background: #25D366; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer; }
+  button:hover { background: #1eb856; }
+  .precios { background: #2a2a2a; padding: 12px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height: 1.8; }
+  .reserva { background: #f5c518; color: black; padding: 12px; border-radius: 10px; margin-top: 15px; display: none; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="caja">
+  <h1>💈 BARBERÍA CARTAGENA</h1>
+  <p>Bocagrande - Cartagena | Abierto 9am a 8pm</p>
+
+  <div class="precios">
+    <b>PRECIOS:</b><br>
+    ✂️ Corte Clásico - $30.000<br>
+    🔥 Corte + Barba - $45.000<br>
+    💈 Corte + Barba + Cejas - $55.000
+  </div>
+
+  <label>Tu nombre</label>
+  <input type="text" id="nombre" placeholder="Ej: Juan Pérez">
+
+  <label>Tu WhatsApp</label>
+  <input type="tel" id="telefono" placeholder="Ej: 3001234567">
+
+  <label>¿Qué corte quieres?</label>
+  <select id="corte">
+    <option>Corte Clásico - $30.000</option>
+    <option>Corte + Barba - $45.000</option>
+    <option>Corte + Barba + Cejas - $55.000</option>
+  </select>
+
+  <label>¿Qué día?</label>
+  <input type="date" id="fecha">
+
+  <label>¿A qué hora?</label>
+  <select id="hora">
+    <option>9:00 AM</option>
+    <option>10:00 AM</option>
+    <option>11:00 AM</option>
+    <option>2:00 PM</option>
+    <option>3:00 PM</option>
+    <option>4:00 PM</option>
+    <option>5:00 PM</option>
+    <option>6:00 PM</option>
+  </select>
+
+  <button onclick="reservar()">RESERVAR POR WHATSAPP</button>
+
+  <div id="mensaje" class="reserva"></div>
+</div>
+
+<script>
+function reservar() {
+  let nombre = document.getElementById('nombre').value;
+  let telefono = document.getElementById('telefono').value;
+  let corte = document.getElementById('corte').value;
+  let fecha = document.getElementById('fecha').value;
+  let hora = document.getElementById('hora').value;
+
+  if (nombre == "" || telefono == "" || fecha == "") {
+    alert("Oye, llena nombre, WhatsApp y fecha");
+    return;
+  }
+
+  // Guarda la reserva en el navegador
+  let reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+  reservas.push({nombre, telefono, corte, fecha, hora});
+  localStorage.setItem('reservas', JSON.stringify(reservas));
+
+  // Muestra confirmación
+  let div = document.getElementById('mensaje');
+  div.style.display = 'block';
+  div.innerHTML = "✅ Listo " + nombre + ", tu reserva quedó guardada para el " + fecha + " a las " + hora + ". Te va a llegar el WhatsApp.";
+
+  // Abre WhatsApp de la barbería con el mensaje listo
+  let mensajeWhats = "Hola, soy " + nombre + ". Quiero reservar: " + corte + " el día " + fecha + " a las " + hora + ". Mi número es " + telefono;
+  let numeroBarberia = "573001234567"; // <--- CAMBIA ESTE NÚMERO POR EL TUYO
+  window.open("https://wa.me/" + numeroBarberia + "?text=" + encodeURIComponent(mensajeWhats), "_blank");
+}
+</script>
+
+</body>
+</html>
